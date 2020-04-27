@@ -1,0 +1,65 @@
+import React, { Component } from 'react'
+import { View } from 'react-native'
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import reducer from './reducers'
+import DeckList from './components/DeckList'
+import AddDeck from './components/AddDeck'
+import { purple, white } from './utils/colors'
+import { FontAwesome, Ionicons } from '@expo/vector-icons'
+import { NavigationContainer } from '@react-navigation/native'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+
+const Tabs = createBottomTabNavigator();
+
+const TabNav = () => (
+    <Tabs.Navigator
+    initialRouteName="Deck List"
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ color, size }) => {
+        let icon;
+        if (route.name === "Add Deck") {
+          icon = (
+            <FontAwesome name="plus-square" size={size} color={color} />
+          );
+        } else if (route.name === "Deck List") {
+          icon = (
+            <Ionicons name="ios-bookmarks" size={size} color={color} />
+          );
+        }
+        return icon;
+      }
+    })}
+    tabBarOptions={{
+      activeTintColor: Platform.OS === "ios" ? purple : white,
+      style: {
+        height: 80,
+        backgroundColor: Platform.OS === "ios" ? white : purple,
+        shadowColor: "rgba(0, 0, 0, 0.24)",
+        shadowOffset: {
+          width: 0,
+          height: 3
+        },
+        shadowRadius: 6,
+        shadowOpacity: 1
+      }
+    }}>
+      <Tabs.Screen name="Add Deck" component={AddDeck} />
+      <Tabs.Screen name="Deck List" component={DeckList} />
+    </Tabs.Navigator>
+)
+
+export default class App extends Component {
+  
+  render() {
+    return (
+      <Provider store={createStore(reducer)}>
+      <View style={{flex: 1}}>
+        <NavigationContainer>
+          <TabNav/>
+        </NavigationContainer>
+      </View>
+      </Provider>
+    )
+  }
+}
