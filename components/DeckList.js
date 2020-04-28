@@ -6,15 +6,18 @@ import { AppLoading} from 'expo'
 import { connect } from 'react-redux'
 import { receiveDecks } from '../actions'
 
-function Item({ title, numQuestions }) {
+function Item({ navigation, title, numQuestions }) {
   // add onPress
   return (
     <View style={styles.item}>
-      <TouchableOpacity style={styles.deckTitleButton}>
+      <TouchableOpacity style={styles.deckTitleButton} onPress={() => navigation.navigate(
+      'Deck',
+      { title }
+    )}>
         <Text style={styles.deckTitleText}>{title}, {numQuestions} Cards</Text>
       </TouchableOpacity> 
     </View>
-  );
+  )
 }
 
 class DeckList extends Component {
@@ -29,7 +32,8 @@ class DeckList extends Component {
       .then(() => this.setState(() => ({ready: true})))
   }
 
-  keyExtractor = item => item.title
+  keyExtractor = item => item.title.toString()
+
 
   render() {
     const { ready } = this.state
@@ -48,6 +52,7 @@ class DeckList extends Component {
                   <Item 
                   title={item.title} 
                   numQuestions={item.questions? item.questions.length : 0}
+                  navigation={this.props.navigation}
                   />}
               />
             </View>

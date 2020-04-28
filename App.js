@@ -9,6 +9,8 @@ import { purple, white } from './utils/colors'
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createStackNavigator } from '@react-navigation/stack'
+import Deck from './components/Deck'
 
 const Tabs = createBottomTabNavigator();
 
@@ -49,6 +51,24 @@ const TabNav = () => (
     </Tabs.Navigator>
 )
 
+const Stack = createStackNavigator()
+const MainNav = () => (
+  <Stack.Navigator headerMode="screen">
+      <Stack.Screen
+          name="Home"
+          component={TabNav}
+          options={{headerShown: false}}/>
+      <Stack.Screen
+          name="Deck"
+          component={Deck}
+          options={{
+              headerTintColor: white, headerStyle: {
+                  backgroundColor: purple,
+              }
+          }}/>
+  </Stack.Navigator>
+)
+
 export default class App extends Component {
   
   render() {
@@ -56,7 +76,7 @@ export default class App extends Component {
       <Provider store={createStore(reducer)}>
       <View style={{flex: 1}}>
         <NavigationContainer>
-          <TabNav/>
+          <MainNav/>
         </NavigationContainer>
       </View>
       </Provider>

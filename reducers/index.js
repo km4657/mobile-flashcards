@@ -1,6 +1,6 @@
-import { RECEIVE_DECKS, ADD_DECK, ADD_CARD } from '../actions'
+import { RECEIVE_DECKS, ADD_DECK, ADD_CARD, REMOVE_DECK } from '../actions'
 
-function entries (state = {}, action) {
+function decks (state = {}, action) {
   switch (action.type) {
     case RECEIVE_DECKS :
       return {
@@ -11,7 +11,7 @@ function entries (state = {}, action) {
       return {
         ...state,
         [action.title]: {
-          ...state[action.title],
+          title : action.title,
           questions: state[action.title].questions.push({[action.card.question]: [action.card.answer]})
         }
       }
@@ -19,12 +19,17 @@ function entries (state = {}, action) {
       return {
         ...state,
         [action.title]: {
-          title: [action.title],
+          title: action.title,
           questions: []
         }
+      }
+    case REMOVE_DECK :
+      delete state[action.title]
+      return {
+        ...state
       }
     default :
       return state
   }
 }
-export default entries 
+export default decks 

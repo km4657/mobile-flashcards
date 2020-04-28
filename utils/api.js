@@ -3,11 +3,15 @@ export const DECK_STORAGE_KEY = 'MobileFlashcards:decks'
 
 export function saveDeckTitle (key) {
   let entry = { title: key, questions: [] }
-  console.log('saveDeckTitle entry')
-  console.log(entry)
   return AsyncStorage.mergeItem(DECK_STORAGE_KEY, JSON.stringify({
     [key]: entry
   }))
+}
+
+export function removeTitle (key, decks) {
+  delete decks.key
+  AsyncStorage.clear()
+  return AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(decks))
 }
 
 export function addCardToDeck ({ key, card }) {
@@ -32,20 +36,18 @@ export function getDeck (key) {
 }
 
 export function getDecks () {
-  //remove clear
   //AsyncStorage.clear()
   return AsyncStorage.getItem(DECK_STORAGE_KEY)
     .then(formatDeckResults)
 }
 
 export function formatDeckResults (decks) {
-  return decks === null
+  return ((decks === null) || (Object.keys(JSON.parse(decks)).length === 0))
   ? setDummyData()
   : JSON.parse(decks)
 }
 
 function setDummyData () {
-  
   const dummyData = {
     React: {
       title: 'React',
