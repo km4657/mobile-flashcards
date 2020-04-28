@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, FlatList, StyleSheet, Platform, TouchableOpacity } from 'react-native'
 import { getDecks } from '../utils/api'
-import { white, lightPurp } from '../utils/colors'
+import { white, lightPurp, gray } from '../utils/colors'
 import { AppLoading} from 'expo'
 import { connect } from 'react-redux'
 import { receiveDecks } from '../actions'
@@ -14,7 +14,17 @@ function Item({ navigation, title, numQuestions }) {
       'Deck',
       { title }
     )}>
-        <Text style={styles.deckTitleText}>{title}, {numQuestions} Cards</Text>
+        <Text style={styles.deckTitleText}>
+          {title}
+        </Text>
+        {numQuestions == 1
+        ? <Text style={styles.numberText}>
+            {numQuestions} Card
+          </Text>
+        : <Text style={styles.numberText}>
+          {numQuestions} Cards
+          </Text>
+        }
       </TouchableOpacity> 
     </View>
   )
@@ -88,14 +98,20 @@ const styles = StyleSheet.create({
     backgroundColor: lightPurp,
     padding: 10,
     borderRadius: 7,
-    height: 45,
+    height: 70,
     marginLeft: 40,
     marginRight: 40,
     marginRight: 40
   },
   deckTitleText: {
     color: white,
-    fontSize: 22,
+    fontSize: 20,
+    textAlign: 'center',
+    paddingBottom: 10
+  },
+  numberText: {
+    color: white,
+    fontSize: 14,
     textAlign: 'center'
   },
   noDecksText: {

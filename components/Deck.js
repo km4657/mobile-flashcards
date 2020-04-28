@@ -3,7 +3,7 @@ import { View, StyleSheet, Text} from 'react-native'
 import {connect} from 'react-redux'
 import {removeDeck} from "../actions"
 import {removeTitle} from '../utils/api'
-import { white, lightPurp } from '../utils/colors'
+import { white, lightPurp, black, gray } from '../utils/colors'
 import TextButton from './TextButton'
 
 
@@ -25,10 +25,13 @@ class Deck extends Component {
 
   render() {
     const {title, decks} = this.props
-    this.setTitle(title);
+    this.setTitle(title)
+    let numQuestions = 0
+    if (decks[title] && decks[title].questions) numQuestions = decks[title].questions.length  
     return (
       <View style={styles.container}>
-         <Text>{title}</Text>
+         <Text style={styles.deckTitleText}>My {title} Deck</Text>
+         <Text style={styles.deckCardText}>{numQuestions} {numQuestions==1 ? 'card' : 'cards'}</Text>
          <TextButton onPress={this.delete} style={{margin: 20}}>Delete Deck</TextButton>
       </View>
     )
@@ -39,7 +42,10 @@ const styles = StyleSheet.create({
   container: {
       flex: 1,
       backgroundColor: white,
-      padding: 15
+      padding: 15,
+      alignItems: 'center',
+      marginLeft: 30,
+      justifyContent: 'center',
   },
   deckTitleButton: {
     backgroundColor: lightPurp,
@@ -51,12 +57,13 @@ const styles = StyleSheet.create({
     marginRight: 40
   },
   deckTitleText: {
-    color: white,
-    fontSize: 22,
+    color: black,
+    fontSize: 26,
     textAlign: 'center'
   },
-  noDecksText: {
-    fontSize: 20,
+  deckCardText: {
+    color: gray,
+    fontSize: 18,
     paddingTop: 20,
     paddingBottom: 20
   }
