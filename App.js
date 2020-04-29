@@ -11,6 +11,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from '@react-navigation/stack'
 import Deck from './components/Deck'
+import AddCard from './components/AddCard'
 import Constants from 'expo-constants'
 
 function UdaciStatusBar ({backgroundColor, ...props}) {
@@ -70,6 +71,14 @@ const MainNav = () => (
       <Stack.Screen
           name="Deck"
           component={Deck}
+          options={{
+              headerTintColor: white, headerStyle: {
+                  backgroundColor: lightPurp,
+              }
+          }}/>
+      <Stack.Screen
+          name="AddCard"
+          component={AddCard}
           options={{
               headerTintColor: white, headerStyle: {
                   backgroundColor: lightPurp,
