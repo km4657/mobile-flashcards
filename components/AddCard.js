@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import { white, lightPurp, black, gray } from '../utils/colors'
+import { addCard } from '../actions'
+import { connect } from 'react-redux'
 import { addCardToDeck } from '../utils/api'
+import {CommonActions} from '@react-navigation/native'
 
 function SubmitBtn ({ onPress }) {
   return (
@@ -14,11 +17,12 @@ function SubmitBtn ({ onPress }) {
 }
 
 
-export default class AddCard extends Component {
+class AddCard extends Component {
   state = {
     question: null,
     answer: null
   }
+
 
   handleQuestionChange = (question) => {
     this.setState(() => ({
@@ -33,31 +37,42 @@ export default class AddCard extends Component {
   }
   
   submit = () => {
-    const key = this.props.title
-    const card = this.state
-  
-    //addCardToDeck({key,card})
     
-    this.setState(() => ({ question: null, answer: null }))
+    const {title, decks } = this.props
+    const card = this.state
+
+    this.props.dispatch(addCard(title, card))
   
-    // Navigate to Deck View
-   
+    this.setState(() => ({ question: null, answer: null }))
+
+    this.toHome()
+
+    addCardToDeck(title, card, decks)
   
   }
 
+  toHome = () => {
+    this.props.navigation.dispatch(
+        CommonActions.goBack({
+            key: 'AddCard',
+        }))
+  } 
+
   render () {
-    const {question, answer} = this.state
+    const { question, answer } = this.state
     return (
       <View style={styles.container}>
         <TextInput 
           style={styles.input}
           value={question}
-          onChange={this.handleQuestionChange}>
+          onChangeText={this.handleQuestionChange}
+          placeholder='Question'>
         </TextInput>
         <TextInput 
           style={styles.input}
           value={answer}
-          onChange={this.handleAnswerChange}>
+          onChangeText={this.handleAnswerChange}
+          placeholder='Answer'>
         </TextInput>
         <SubmitBtn onPress={this.submit} />
       </View>
@@ -105,3 +120,15 @@ const styles = StyleSheet.create({
     borderWidth: 1
   },
 })
+
+
+function mapStateToProps(decks, {route}) {
+  const title = route.params.title
+  return ({
+          title,
+          decks
+      }
+  )
+}
+
+export default connect(mapStateToProps)(AddCard)

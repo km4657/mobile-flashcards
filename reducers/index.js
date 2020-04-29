@@ -11,8 +11,8 @@ function decks (state = {}, action) {
       return {
         ...state,
         [action.title]: {
-          title : action.title,
-          questions: state[action.title].questions.push({[action.card.question]: [action.card.answer]})
+          ...state[action.title],
+          questions : state[action.title].questions.concat({question: action.card.question, answer: action.card.answer})
         }
       }
     case ADD_DECK :

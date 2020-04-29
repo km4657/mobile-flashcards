@@ -14,17 +14,16 @@ export function removeTitle (key, decks) {
   return AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(decks))
 }
 
-export function addCardToDeck ({ key, card }) {
-  let deck = getDeck(key)
-  deck = {
-    ...deck,
-    questions: (deck && deck.questions) 
-             ? deck.questions.push({ 'question': card.question, 'answer' : card.answer })
-             : [{ 'question' : card.question, 'answer' : card.answer }]
+export function addCardToDeck (key, card, decks) {
+  decks = {
+    ...decks,
+    [key] : {
+      ...decks[key],
+      questions: decks[key].questions.concat({question: card.question, answer: card.answer})
+    }
   }
-  return AsyncStorage.mergeItem(DECK_STORAGE_KEY, JSON.stringify({
-    [key]: { deck }
-  }))
+  AsyncStorage.clear()
+  return AsyncStorage.setItem(DECK_STORAGE_KEY, JSON.stringify(decks))
 }
 
 export function getDeck (key) {
@@ -36,7 +35,6 @@ export function getDeck (key) {
 }
 
 export function getDecks () {
-  //AsyncStorage.clear()
   return AsyncStorage.getItem(DECK_STORAGE_KEY)
     .then(formatDeckResults)
 }
