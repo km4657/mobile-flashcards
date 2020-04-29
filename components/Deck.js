@@ -40,6 +40,14 @@ class Deck extends Component {
               Add Card
             </Text>
         </TouchableOpacity> 
+        <TouchableOpacity style={styles.deckTitleButton} onPress={() => this.props.navigation.navigate(
+          'Quiz',
+          { title }
+          )}>
+            <Text style={styles.deckButtonText}>
+              Start Quiz
+            </Text>
+        </TouchableOpacity> 
         <TextButton onPress={this.delete} style={{margin: 20}}>Delete Deck</TextButton>
       </View>
     )
@@ -72,7 +80,14 @@ const styles = StyleSheet.create({
     height: 45,
     marginLeft: 40,
     marginRight: 40,
-    marginRight: 40
+    marginTop: 17,
+    shadowRadius: 3,
+    shadowOpacity: 0.8,
+    shadowColor: 'rgba(0, 0, 0, 0.24)',
+    shadowOffset: {
+      width: 0,
+      height: 3
+    },
   },
   deckTitleText: {
     color: lightPurp,
