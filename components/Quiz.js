@@ -2,43 +2,28 @@ import React, { Component } from 'react'
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native'
 import { white, lightPurp, black, gray } from '../utils/colors'
 import { connect } from 'react-redux'
-
-function CorrectBtn ({ onPress }) {
-  return (
-    <TouchableOpacity
-      style={styles.iosSubmitBtn}
-      onPress={onPress}>
-        <Text style={styles.submitBtnText}>CORRECT</Text>
-    </TouchableOpacity>
-  )
-}
-
-function IncorrectBtn ({ onPress }) {
-  return (
-    <TouchableOpacity
-      style={styles.iosSubmitBtn}
-      onPress={onPress}>
-        <Text style={styles.submitBtnText}>INCORRECT</Text>
-    </TouchableOpacity>
-  )
-}
-
+import TextButton from './TextButton'
+import SubmitButton from './SubmitButton'
+import {CommonActions} from '@react-navigation/native'
 
 class Quiz extends Component {
   state = {
     questionIndex: 0,
     numCorrect: 0,
-    complete: false
+    complete: false,
+    showAnswer: false
   }
 
   submitIncorrect = () => {
     this.state.questionIndex < this.props.numQuestions -1 
       ? this.setState(prevState => ({
-        questionIndex: prevState.questionIndex + 1
+        questionIndex: prevState.questionIndex + 1,
+        showAnswer: false
       }))
       : this.setState(prevState => ({
         questionIndex: 0,
-        complete : true
+        complete : true,
+        showAnswer: false
       }))
   }
 
@@ -46,31 +31,57 @@ class Quiz extends Component {
     this.state.questionIndex < this.props.numQuestions -1
       ? this.setState(prevState => ({
         questionIndex: prevState.questionIndex + 1,
-        numCorrect: prevState.numCorrect + 1 
+        numCorrect: prevState.numCorrect + 1,
+        showAnswer: false
       }))
       : this.setState(prevState => ({
         questionIndex: 0,
         complete : true,
-        numCorrect: prevState.numCorrect + 1 
+        numCorrect: prevState.numCorrect + 1,
+        showAnswer: false
       }))
   }
 
+  showAnswer = () => {
+    this.setState(prevState => ({
+        showAnswer: true
+      }))
+  }
+
+  toHome = () => {
+    this.props.navigation.dispatch(
+        CommonActions.goBack({
+            key: 'Quiz',
+        }))
+  } 
+  restart = () => {
+    this.setState(prevState => ({
+      questionIndex: 0,
+      numCorrect: 0,
+      showAnswer: false,
+      complete: false
+    }))
+  } 
+
 
   render () {
-    const { questionIndex, numCorrect, complete } = this.state
-    const { title, questions } = this.props
+    const { questionIndex, numCorrect, complete, showAnswer } = this.state
+    const { title, questions, numQuestions} = this.props
     return (
       <View style={styles.container}>
-        <Text>{title}</Text>
         {complete
           ? <View>
-            <Text>Quiz is complete</Text>
-            <Text>{numCorrect}</Text>
+            <Text style={styles.quizText}>Quiz is complete</Text>
+            <Text style={styles.quizText}>{numCorrect} Correct</Text>
+            <SubmitButton text='RESTART QUIZ' onPress={this.restart} />
+            <SubmitButton text='BACK TO DECK' onPress={this.toHome} />
             </View>
           : <View>
-            <Text>{questions[questionIndex].question}</Text>
-            <CorrectBtn onPress={this.submitCorrect} />
-            <IncorrectBtn onPress={this.submitIncorrect} />
+            <Text style={styles.quizText}>{questionIndex + 1}/{numQuestions}</Text>
+            <Text style={styles.quizText}>{showAnswer? questions[questionIndex].answer : questions[questionIndex].question}</Text>
+            <TextButton onPress={this.showAnswer} style={{margin: 20}}>Show Answer</TextButton>
+            <SubmitButton text='CORRECT' onPress={this.submitCorrect} />
+            <SubmitButton text='INCORRECT' onPress={this.submitIncorrect} />
             </View>
         }
       </View>
@@ -96,25 +107,10 @@ const styles = StyleSheet.create({
       height: 3
     },
 },
-  iosSubmitBtn: {
-    backgroundColor: lightPurp,
-    padding: 10,
-    borderRadius: 7,
-    height: 45,
-    marginLeft: 40,
-    marginRight: 40,
-    marginTop: 17,
-    shadowRadius: 3,
-    shadowOpacity: 0.8,
-    shadowColor: 'rgba(0, 0, 0, 0.24)',
-    shadowOffset: {
-      width: 0,
-      height: 3
-    },
-  },
-  submitBtnText: {
-    color: white,
+  quizText: {
     fontSize: 22,
+    paddingTop: 20,
+    paddingBottom: 20,
     textAlign: 'center'
   }
 })

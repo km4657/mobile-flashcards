@@ -5,17 +5,7 @@ import { addCard } from '../actions'
 import { connect } from 'react-redux'
 import { addCardToDeck } from '../utils/api'
 import {CommonActions} from '@react-navigation/native'
-
-function SubmitBtn ({ onPress }) {
-  return (
-    <TouchableOpacity
-      style={styles.iosSubmitBtn}
-      onPress={onPress}>
-        <Text style={styles.submitBtnText}>ADD CARD</Text>
-    </TouchableOpacity>
-  )
-}
-
+import SubmitButton from './SubmitButton'
 
 class AddCard extends Component {
   state = {
@@ -74,7 +64,7 @@ class AddCard extends Component {
           onChangeText={this.handleAnswerChange}
           placeholder='Answer'>
         </TextInput>
-        <SubmitBtn onPress={this.submit} />
+        <SubmitButton text='ADD CARD' onPress={this.submit} />
       </View>
     )
   }
@@ -99,19 +89,6 @@ const styles = StyleSheet.create({
       height: 3
     },
 },
-  iosSubmitBtn: {
-    backgroundColor: lightPurp,
-    padding: 10,
-    borderRadius: 7,
-    height: 45,
-    marginLeft: 40,
-    marginRight: 40
-  },
-  submitBtnText: {
-    color: white,
-    fontSize: 22,
-    textAlign: 'center'
-  },
   input: {
     height: 40, 
     width: 200,
