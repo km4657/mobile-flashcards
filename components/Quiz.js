@@ -5,6 +5,8 @@ import { connect } from 'react-redux'
 import TextButton from './TextButton'
 import SubmitButton from './SubmitButton'
 import {CommonActions} from '@react-navigation/native'
+import {clearLocalNotification, setLocalNotification} from '../utils/helpers'
+
 
 class Quiz extends Component {
   state = {
@@ -48,11 +50,14 @@ class Quiz extends Component {
       }))
   }
 
-  toHome = () => {
+  finishQuiz = () => {
     this.props.navigation.dispatch(
         CommonActions.goBack({
             key: 'Quiz',
         }))
+    // Clear local notification
+    clearLocalNotification()
+    .then(setLocalNotification)
   } 
   restart = () => {
     this.setState(prevState => ({
@@ -61,6 +66,9 @@ class Quiz extends Component {
       showAnswer: false,
       complete: false
     }))
+     // Clear local notification
+     clearLocalNotification()
+     .then(setLocalNotification)
   } 
 
 
@@ -73,15 +81,15 @@ class Quiz extends Component {
           ? <View>
             <Text style={styles.quizText}>Quiz is complete</Text>
             <Text style={styles.quizText}>{numCorrect} Correct</Text>
-            <SubmitButton text='RESTART QUIZ' onPress={this.restart} />
-            <SubmitButton text='BACK TO DECK' onPress={this.toHome} />
+            <SubmitButton text='Restart Quiz' onPress={this.restart} />
+            <SubmitButton text='Back to Deck' onPress={this.finishQuiz} />
             </View>
           : <View>
             <Text style={styles.quizText}>{questionIndex + 1}/{numQuestions}</Text>
             <Text style={styles.quizText}>{showAnswer? questions[questionIndex].answer : questions[questionIndex].question}</Text>
             <TextButton onPress={this.showAnswer} style={{margin: 20}}>Show Answer</TextButton>
-            <SubmitButton text='CORRECT' onPress={this.submitCorrect} />
-            <SubmitButton text='INCORRECT' onPress={this.submitIncorrect} />
+            <SubmitButton text='Correct' onPress={this.submitCorrect} />
+            <SubmitButton text='Incorrect' onPress={this.submitIncorrect} />
             </View>
         }
       </View>

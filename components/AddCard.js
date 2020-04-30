@@ -64,7 +64,7 @@ class AddCard extends Component {
           onChangeText={this.handleAnswerChange}
           placeholder='Answer'>
         </TextInput>
-        <SubmitButton text='ADD CARD' onPress={this.submit} />
+        <SubmitButton text='Add Card' onPress={this.submit} />
       </View>
     )
   }
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
     marginTop: 17,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     shadowRadius: 3,
     shadowOpacity: 0.8,
     shadowColor: 'rgba(0, 0, 0, 0.24)',

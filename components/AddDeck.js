@@ -5,16 +5,9 @@ import { purple, white } from '../utils/colors'
 import {CommonActions} from '@react-navigation/native'
 import { addDeck } from '../actions'
 import { connect } from 'react-redux'
+import SubmitButton from './SubmitButton'
 
-function SubmitBtn ({ onPress }) {
-  return (
-    <TouchableOpacity
-      style={styles.iosSubmitBtn}
-      onPress={onPress}>
-        <Text style={styles.submitBtnText}>Submit</Text>
-    </TouchableOpacity>
-  )
-}
+
 
 
 class AddDeck extends Component {
@@ -63,7 +56,7 @@ class AddDeck extends Component {
           value={title}
           onChangeText={this.handleTitleChange}>
         </TextInput>
-        <SubmitBtn onPress={this.submit} />
+        <SubmitButton text='Submit' onPress={this.submit} />
       </View>
     )
   }

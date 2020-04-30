@@ -14,6 +14,7 @@ import Deck from './components/Deck'
 import AddCard from './components/AddCard'
 import Quiz from './components/Quiz'
 import Constants from 'expo-constants'
+import { setLocalNotification } from './utils/helpers'
 
 function UdaciStatusBar ({backgroundColor, ...props}) {
   return (
@@ -97,6 +98,10 @@ const MainNav = () => (
 )
 
 export default class App extends Component {
+
+  componentDidMount() {
+    setLocalNotification()
+  }
   
   render() {
     return (
